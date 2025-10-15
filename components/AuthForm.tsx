@@ -37,7 +37,7 @@ const authFormSchema = (formType: FormType) => {
 const AuthForm = ({ type }: { type: FormType }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [accountId , setAccountId] = useState(null);
+  const [accountId, setAccountId] = useState(null);
   // 1. Define your form.
   const formSchema = authFormSchema(type);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,19 +54,19 @@ const AuthForm = ({ type }: { type: FormType }) => {
     // ✅ This will be type-safe and validated.
     setIsLoading(true);
 
-    try{
+    try {
       const user = await createAccount({
         fullName: values.fullName || "",
-        email: values.email
+        email: values.email,
       });
-  
-      setAccountId(user.accountId)
+
+      setAccountId(user.accountId);
       console.log(values);
-    }catch (e){
+    } catch (e) {
       setErrorMessage("Failed to create account Please try again");
-    }finally{
-      setIsLoading(false)
-      setErrorMessage("")
+    } finally {
+      setIsLoading(false);
+      setErrorMessage("");
     }
   };
 
@@ -153,8 +153,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
       </Form>
 
       {/* OTP VERIFICATION */}
-      {true && <OTPModal email = {form.getValues('email')} accountId = {accountId}/>}
-      
+      {accountId && (
+        <OTPModal email={form.getValues("email")} accountId={accountId} />
+      )}
     </>
   );
 };
