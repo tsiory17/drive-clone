@@ -4,7 +4,7 @@
 //
 // Enter email → Check if exists → Send OTP → Verify OTP → Authenticate
 
-import { createAdminClient } from "@/lib/appwrite/index";
+import { createAdminClient, createSessionClient } from "@/lib/appwrite/index";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { Query, ID } from "node-appwrite";
 import { parseStringify } from "../utils";
@@ -88,5 +88,25 @@ export const verifySecret = async ({
     return parseStringify({ sessionId: session.$id });
   } catch (e) {
     handleError(e, "Failed to verify OTP");
+  }
+};
+
+export const getCurrentUser = async () => {
+  try {
+    const { databases, account } = await createSessionClient();
+
+    const result = await account.get();
+
+    const user = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersTable,
+      [Query.equal("accountId", result.$id)],
+    );
+
+    if (user.total <= 0) return null;
+
+    return parseStringify(user.documents[0]);
+  } catch (error) {
+    console.log(error);
   }
 };

@@ -15,22 +15,21 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           />
 
           <div className="space-y-5 text-white">
-            <h1>
+            <h1 className="text-3xl font-bold leading-none">
               {" "}
-              Manage
-              asffdssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+              STORAGE MANAGER
             </h1>
-            <p className="body-1">Place you can store your docs</p>
+            {/* <p className="body-1">Place you can store your docs</p> */}
           </div>
         </div>
       </section>
       <section className="flex flex-1 flex-col items-center bg-white p-4 py-10 lg:justify-center lg:p-10 lg:py-0">
         <div className="mb-1 lg:hidden">
           <Image
-            src="/assets/icons/logo-full-brand.svg"
+            src="/assets/icons/logo-brand.svg"
             alt="logo"
-            width={224}
-            height={82}
+            width={214}
+            height={72}
             className="h-auto w-[200px] lg:w-[200px]"
           />
         </div>
