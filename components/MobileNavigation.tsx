@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -11,7 +12,11 @@ import {
 import Image from "next/image";
 import SideBar from "@/components/SideBar";
 import { usePathname } from "next/navigation";
-import { avatarPlaceholderUrl } from "@/constant";
+import { avatarPlaceholderUrl, navItems } from "@/constant";
+import Link from "next/link";
+import FileUploader from "@/components/FileUploader";
+import { Button } from "@/components/ui/button";
+import { signOutUser } from "@/lib/actions/user.actions";
 
 interface Props {
   ownerId: string;
@@ -67,8 +72,54 @@ function MobileNavigation({
                 className="header-user-avatar"
               />
             </div>
+            <Separator className="mb-4 bg-light-200/20" />
           </SheetTitle>
-          <SheetDescription></SheetDescription>
+          <nav className="mobile-nav">
+            <ul className="mobile-nav-list">
+              {navItems.map(({ url, name, icon }) => {
+                const active = pathname === url;
+                return (
+                  <Link href={url} key={name} className="lg:w-full">
+                    <li
+                      className={
+                        active
+                          ? "mobile-nav-item shad-active"
+                          : "mobile-nav-item"
+                      }
+                    >
+                      {/* <li */}
+                      {/*  className={cn( */}
+                      {/*    "sidebar-nav-item", */}
+                      {/*    pathname === url && "shad-active", */}
+                      {/*  )} */}
+                      {/* > */}
+                      <Image src={icon} alt={name} height={24} width={24} />
+                      <p>{name}</p>
+                    </li>
+                  </Link>
+                );
+              })}
+            </ul>
+          </nav>
+          <Separator className="mb-4 bg-light-200/20" />
+
+          <div className="justify-between-gap-5 flex flex-col pb-5">
+            <FileUploader />
+            <Button
+              className="sign-out-button"
+              type="submit"
+              onClick={async () => signOutUser()}
+            >
+              <Image
+                src="/assets/icons/logout.svg"
+                alt="logout"
+                width={24}
+                height={24}
+                // className="w-6"
+              />
+              Logout
+            </Button>
+          </div>
         </SheetContent>
       </Sheet>
     </header>

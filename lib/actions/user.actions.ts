@@ -9,6 +9,7 @@ import { appwriteConfig } from "@/lib/appwrite/config";
 import { Query, ID } from "node-appwrite";
 import { parseStringify } from "../utils";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const getUserByEmail = async (email: string) => {
   const { databases } = await createAdminClient();
@@ -108,5 +109,19 @@ export const getCurrentUser = async () => {
     return parseStringify(user.documents[0]);
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const signOutUser = async () => {
+  const { account } = await createSessionClient();
+
+  try {
+    // Delete the current session
+    await account.deleteSession("current");
+    (await cookies()).delete("appwrite-session");
+  } catch (e) {
+    handleError(e, "Failed to sign out");
+  } finally {
+    redirect("/sign-in");
   }
 };
